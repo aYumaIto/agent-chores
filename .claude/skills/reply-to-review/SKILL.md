@@ -1,6 +1,6 @@
 ---
-name: reply-to-review
-description: "PR レビューコメントへ返信する。コミットリンク付きの返信を作成し、ユーザー承認後に gh API で投稿する。"
+name: pr-review-respond
+description: "PR レビューコメントへ対応・返信・解決する。「PRのコメントに対応」「レビュー対応して」「返信して解決」等の指示で使用。"
 ---
 # PR レビューコメントへの返信
 
@@ -69,12 +69,29 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
   -F in_reply_to=<comment_id> --jq '.id'
 ```
 
+### 6. スレッドを解決する
+
+返信投稿後、**Copilot（`copilot-pull-request-reviewer`）によるレビューコメントのみ** GraphQL で resolve します。
+
+```bash
+# スレッド ID を取得
+THREAD_ID=$(gh api graphql -f query='{ repository(owner:"{owner}", name:"{repo}") { pullRequest(number:{pr_number}) { reviewThreads(first:50) { nodes { id isResolved comments(first:1) { nodes { databaseId } } } } } } }' \
+  --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.comments.nodes[0].databaseId == {comment_id}) | .id')
+
+# 解決
+gh api graphql -f query="mutation { resolveReviewThread(input: {threadId: \"${THREAD_ID}\"}) { thread { isResolved } } }" \
+  --jq '.data.resolveReviewThread.thread.isResolved'
+```
+
+> **⚠️ 重要**: Copilot 以外のレビュアーのスレッドは **絶対に** 勝手に resolve してはいけません。返信のみ行い、解決はレビュアー本人に委ねてください。
+
 ## 注意
 
 - 返信の言語は上記フォーマットに従う
   - 指定のない場合、コメントと同じ言語で返信する
 - コード変更がある場合は末尾に必ずコミットリンクを付ける
 - ユーザー承認なしで返信を投稿しない
+- Copilot のコメントのみ自動解決する。人間のレビュアーのスレッドは解決しない
 
 ## 出力ルール
 
