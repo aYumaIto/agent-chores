@@ -12,12 +12,7 @@ description: "PR レビューコメントへ対応・返信・解決する。「
 
 ### 1. レビューコメントを特定する
 
-アクティブ PR から未解決のレビューコメントを取得します。
-
-```bash
-gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
-  --jq '.[] | select(.in_reply_to_id == null) | "\(.id) \(.path): \(.body)"'
-```
+MCP サーバー（GitHub MCP）の `get_review_comments` を使用して、アクティブ PR の未解決レビューコメントを取得します。
 
 ### 2. 修正コミットを特定する
 

@@ -33,14 +33,6 @@ argument-hint: "機能名（例: add-chat-history）"
 .claude/skills/setup-worktree/setup-worktree.sh fix api-timeout
 ```
 
-## スクリプトの実行内容
-
-1. リポジトリ状態を確認する
-2. 最新の `origin/main` を取得する
-3. `../<repo-name>-worktrees/<feature-name>` に worktree を作成し、ブランチ `<type>-<feature-name>` を作成する
-4. `.vscode/settings.json` があれば skip-worktree に設定する
-5. 検証のため、全 worktree 一覧を表示する
-
 ## 注意
 
 - 既存と重複するパス名は使用しない
