@@ -1,7 +1,7 @@
 ---
 name: setup-worktree
 description: "機能実装用の worktree を作成する。origin/main から作業ブランチ付き worktree を作り、開発環境を準備する。"
-argument-hint: "機能名（例: add-chat-history）"
+argument-hint: "<type> <feature-name>（例: feat add-chat-history）"
 ---
 # 機能開発用 Worktree セットアップ
 
