@@ -1,19 +1,42 @@
 # agent-chores
 
-AI エージェント（GitHub Copilot / Claude）向けのルール・スキル・設定をまとめたテンプレートリポジトリです。
+AI エージェント向けのルール・スキル・設定をまとめたリポジトリです。
+ツール非依存の構成で、各ツールへの配置はシンボリックリンクやコピーで行います。
+
+## ディレクトリ構成
+
+```
+agent-chores/
+├── project/              # プロジェクト（リポジトリ）に配置するテンプレート
+│   ├── instructions/     # 常時適用ルール
+│   ├── skills/           # ワークフロー定義
+│   └── github/           # GitHub 関連テンプレート
+├── personal/             # 個人設定（~/.config/agents 等に配置）
+│   ├── instructions/     # 個人ルール
+│   └── skills/           # 個人スキル
+└── README.md
+```
 
 ## 使い方
 
-1. このリポジトリをフォークまたはテンプレートとして使用する
-2. 各ファイル内の `<!-- TODO: ... -->` コメントをプロジェクトに合わせて編集する
-3. プロジェクト固有のルールやスキルを追加する
+### プロジェクト向け
 
-## 含まれるもの
+1. `project/instructions/` と `project/skills/` の内容をリポジトリにコピーする
+2. 各ファイル内の `<!-- TODO: ... -->` をプロジェクトに合わせて編集する
+3. `project/github/` の内容を `.github/` に配置する
 
-- `.claude/rules/` — アーキテクチャ、コーディング規約、Git 運用、セキュリティなどのルール定義
-- `.claude/skills/` — ビルド、Issue/PR 作成、レビュー返信などのスキル定義
-- `.github/copilot-instructions.md` — Copilot コードレビュー時のプレフィックス指示
-- `.github/pull_request_template.md` — PR テンプレート
+### 個人設定
+
+1. `personal/` の内容を `~/.config/agents/` にコピーまたはリンクする
+2. エージェントのスキル読み込みパスにシンボリックリンクを張る
+
+### ツール別の配置先
+
+| ツール | instructions | skills |
+|--------|-------------|--------|
+| Claude Code | `.claude/rules/` | `.claude/skills/` |
+| Copilot CLI | `~/.copilot/instructions/` | `~/.copilot/skills/` |
+| 共通原本 | `~/.config/agents/instructions/` | `~/.config/agents/skills/` |
 
 ## ライセンス
 
