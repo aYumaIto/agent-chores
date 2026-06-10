@@ -28,8 +28,7 @@ argument-hint: "skill name / description"
 ### 新規作成
 
 1. ユーザーに提案して承認を得る
-2. スキルディレクトリに `<kebab-case>/SKILL.md` を作成する
-3. 必要に応じてエージェントのスキル読み込みパスにシンボリックリンクを張る
+2. `<SKILLS_DIR>/<kebab-case>/SKILL.md` を作成する
 
 ### 既存スキルの改善
 

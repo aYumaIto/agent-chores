@@ -1,42 +1,50 @@
 # agent-chores
 
-AI エージェント向けのルール・スキル・設定をまとめたリポジトリです。
-ツール非依存の構成で、各ツールへの配置はシンボリックリンクやコピーで行います。
+AI エージェント向けのルール・スキル・設定をまとめたリポジトリ。
+各ツールのディレクトリだけ見れば必要なファイルが揃う構成にしている。
+共通ファイルは `shared/` に実体を置き、ツール別ディレクトリから symlink で参照する。
 
 ## ディレクトリ構成
 
 ```
 agent-chores/
-├── project/              # プロジェクト（リポジトリ）に配置するテンプレート
-│   ├── instructions/     # 常時適用ルール
-│   ├── skills/           # ワークフロー定義
-│   └── github/           # GitHub 関連テンプレート
-├── personal/             # 個人設定（~/.config/agents 等に配置）
-│   ├── instructions/     # 個人ルール
-│   └── skills/           # 個人スキル
+├── personal/                       # 個人マシン向け
+│   ├── shared/                     # ツール非依存（実体）
+│   │   ├── instructions/           # ルール
+│   │   └── skills/                 # スキル
+│   ├── claude/                     # Claude Code 専用
+│   │   ├── agents/                 # Subagent 定義（~/.claude/agents/ に配置）
+│   │   ├── instructions -> ../shared/instructions
+│   │   └── skills -> ../shared/skills
+│   └── copilot/                    # Copilot CLI 専用
+│       ├── agents/                 # .agent.md（Copilot Custom Agent）
+│       └── instructions -> ../shared/instructions
+├── project/                        # リポジトリに配置するテンプレート
+│   ├── shared/                     # ツール非依存（PR template 等）
+│   │   ├── instructions/
+│   │   ├── skills/
+│   │   └── pull_request_template.md
+│   ├── claude/                     # .claude/ に配置する Claude 専用
+│   └── copilot/                    # Copilot 専用
+│       └── copilot-instructions.md # .github/copilot-instructions.md に配置
 └── README.md
 ```
 
 ## 使い方
 
-### プロジェクト向け
+Claude Code を使う場合は `personal/claude/` 、Copilot CLI を使う場合は `personal/copilot/` の中身を参照する。
+symlink 経由で `shared/` の instructions・skills も含まれる。
 
-1. `project/instructions/` と `project/skills/` の内容をリポジトリにコピーする
-2. 各ファイル内の `<!-- TODO: ... -->` をプロジェクトに合わせて編集する
-3. `project/github/` の内容を `.github/` に配置する
+**注意**: ファイル内には `<INSTRUCTIONS_DIR>`、`<SKILLS_DIR>` などのプレースホルダーを使っている箇所がある。そのまま配置しても動作しないため、自身の環境に合わせて実パスに書き換えること。`grep -rn '<[A-Z_]*>' personal/` でプレースホルダーの一覧を確認できる。
 
-### 個人設定
+## ツール固有 vs 共通の判断基準
 
-1. `personal/` の内容を `~/.config/agents/` にコピーまたはリンクする
-2. エージェントのスキル読み込みパスにシンボリックリンクを張る
-
-### ツール別の配置先
-
-| ツール | instructions | skills |
-|--------|-------------|--------|
-| Claude Code | `.claude/rules/` | `.claude/skills/` |
-| Copilot CLI | `~/.copilot/instructions/` | `~/.copilot/skills/` |
-| 共通原本 | `~/.config/agents/instructions/` | `~/.config/agents/skills/` |
+| 性質 | 配置先 |
+|---|---|
+| エージェント挙動の一般原則（回答スタイル、安全性等） | `shared/` |
+| ツール固有のファイル書式・設定（frontmatter、tool 名等） | `claude/` or `copilot/` |
+| ツール固有の機能を前提とする skill | `claude/` or `copilot/` |
+| 迷ったとき | まず `shared/` に置き、ツール固有差分が出たら分離 |
 
 ## ライセンス
 
