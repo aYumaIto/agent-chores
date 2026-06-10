@@ -46,6 +46,15 @@ symlink 経由で `shared/` の instructions・skills も含まれる。
 | ツール固有の機能を前提とする skill | `claude/` or `copilot/` |
 | 迷ったとき | まず `shared/` に置き、ツール固有差分が出たら分離 |
 
+## 外部依存
+
+一部のスキル・エージェントは外部ツールを前提としている。
+
+| ツール | 用途 | 参照先 |
+|---|---|---|
+| [RTK](https://github.com/rtk-ai/rtk) | トークン最適化 CLI プロキシ | `instructions/rtk-usage.instructions.md` |
+| [android CLI](https://developer.android.com/tools/agents/android-cli) | Android ビルド・デプロイ・SDK 管理 | `skills/android-cli/`、`agents/android-runner.*` |
+
 ## ライセンス
 
 [MIT](LICENSE)
